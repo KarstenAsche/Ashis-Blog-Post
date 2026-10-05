@@ -9,8 +9,8 @@ dotenvconfig();
 const blogEnabled = Boolean(process.env.BLOG_ENABLED === 'true')
 
 const config: Config = {
-  title: 'DSO Live Demo Docs',
-  tagline: 'Dinosaurs are cool',
+  title: 'Live Blog Karsten Asche',
+  tagline: 'Karsten Asche\'s personal blog about software development, DevOps, and cloud computing.',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
