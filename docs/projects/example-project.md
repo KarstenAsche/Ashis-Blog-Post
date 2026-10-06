@@ -10,7 +10,7 @@ A simple and brief description and intro to the project.
 import GithubLinkAdmonition from '@site/src/components/GithubLinkAdmonition';
 
 <GithubLinkAdmonition 
-    link="https://github.com/spmse/dev-blog-template"
+    link="https://github.com/KarstenAsche/Ashis-Blog-Post"
     title="Github Tip" 
     type="tip"
 >

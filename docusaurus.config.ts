@@ -7,14 +7,16 @@ dotenvconfig();
 
 /* TODO: change to read configuration from environment */
 const blogEnabled = Boolean(process.env.BLOG_ENABLED === 'true')
+const repositoryUrl = process.env.GIT_REPOSITORY_URL ?? "https://github.com/KarstenAsche/Ashis-Blog-Post"
 
 const config: Config = {
   title: 'Live Blog Karsten Asche',
   tagline: 'Karsten Asche\'s personal blog about software development, DevOps, and cloud computing.',
   favicon: 'img/favicon.ico',
 
+  
   // Set the production url of your site here
-  url: process.env.DEPLOYMENT_URL ?? "https://spmse.github.io",
+  url: process.env.DEPLOYMENT_URL ?? "https://karstenasche.github.io",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: process.env.BASE_URL ?? "/",
@@ -50,7 +52,7 @@ const config: Config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/spmse/dev-blog-template',
+            repositoryUrl,
         },
         blog: blogEnabled ? 
           {
@@ -62,7 +64,7 @@ const config: Config = {
             // Please change this to your repo.
             // Remove this to remove the "edit this page" links.
             editUrl:
-              'https://github.com/spmse/dev-blog-template',
+              repositoryUrl,
             // Useful options to enforce blogging best practices
             onInlineTags: 'warn',
             onInlineAuthors: 'warn',
@@ -80,10 +82,10 @@ const config: Config = {
     // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
     navbar: {
-      title: 'My Site',
+      title: 'Ashis Site',
       logo: {
         alt: 'My Site Logo',
-        src: 'img/logo.svg',
+        src: 'img/ka-logo.png',
       },
       items: [
         {
@@ -93,10 +95,13 @@ const config: Config = {
           label: 'Docs',
         },
         {
-          href: 'https://github.com/spmse/dev-blog-template',
+          href: repositoryUrl,
           label: 'Github',
           position: 'right',
         },
+        ...(blogEnabled
+          ? [{to: '/blog', label: 'Blog', position: 'left' as const}]
+          : []),
       ],
     },
     footer: {
@@ -109,23 +114,10 @@ const config: Config = {
               label: 'Tutorial',
               to: '/docs/guides/intro',
             },
-          ],
-        },
-        {
-          title: 'Community',
-          items: [
             {
-              label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-            },
-            {
-              label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
-            },
-            {
-              label: 'Twitter',
-              href: 'https://twitter.com/docusaurus',
-            },
+              label: 'Overview',
+              to: '/docs/projects/overview',
+            }
           ],
         },
         {
@@ -133,12 +125,17 @@ const config: Config = {
           items: [
             {
               label: 'GitHub',
+              href: repositoryUrl,
+            },
+            {
+              label: 'Template',
               href: 'https://github.com/facebook/docusaurus',
-            }
+            },
+            ...(blogEnabled ? [{label: 'Blog', to: '/blog'}] : []),
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} Sven Patrick Meier (spmse). Built with Docusaurus and 💚.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Karsten Asche. Extended from the developer-akademie-starter.`,
     },
     prism: {
       theme: prismThemes.github,
@@ -159,16 +156,4 @@ const config: Config = {
     },
   } satisfies Preset.ThemeConfig,
 };
-
-
-if (blogEnabled) {
-  (config.themeConfig.navbar as any).items.push({to: '/blog', label: 'Blog', position: 'left'});
-  (
-    config.themeConfig.footer as any
-  ).links[2].items.push({
-    to: '/blog',
-    label: 'Blog',
-  });
-}
-
 export default config;
