@@ -201,7 +201,7 @@ Example:
   items: [
     {
       label: 'GitHub',
-      href: gitRepositoryUrl,
+      href: repositoryUrl,
     },
     {
       label: 'Template Repository',
@@ -211,15 +211,127 @@ Example:
 },
 ```
 
-### 4.9 Update the Copyright Message
+### 4.9 Configure Conditional Blog Links and Fix the Footer Error
+
+The blog is controlled through the `BLOG_ENABLED` environment variable. When the blog should be enabled, the `.env` file contains:
+
+```env
+BLOG_ENABLED=true
+```
+
+The value is read in `docusaurus.config.ts` and converted to a Boolean expression:
+
+```ts
+const blogEnabled = process.env.BLOG_ENABLED === 'true';
+```
+
+The blog plugin is only enabled when this value is `true`:
+
+```ts
+blog: blogEnabled
+  ? {
+      showReadingTime: true,
+      editUrl: repositoryUrl,
+    }
+  : false,
+```
+
+The files inside the `blog/` directory alone do not activate the blog. The `BLOG_ENABLED` variable must also be set accordingly.
+
+#### Original Configuration Error
+
+Initially, the blog links for the navbar and footer were added after the main configuration object had already been created:
+
+```ts
+if (blogEnabled) {
+  (config.themeConfig.navbar as any).items.push({
+    to: '/blog',
+    label: 'Blog',
+    position: 'left',
+  });
+
+  (config.themeConfig.footer as any).links[2].items.push({
+    to: '/blog',
+    label: 'Blog',
+  });
+}
+```
+
+This caused a runtime error because the footer only contained two groups: `Docs` and `More`. JavaScript arrays are zero-based, so only `links[0]` and `links[1]` existed.
+
+Accessing `links[2].items` therefore attempted to read `items` from `undefined` and resulted in:
+
+```text
+TypeError: Cannot read properties of undefined (reading 'items')
+```
+
+#### Fix the Navbar Configuration
+
+Instead of modifying the configuration afterwards, the optional blog link is now added directly while the navbar items are created:
+
+```ts
+items: [
+  {
+    type: 'docSidebar',
+    sidebarId: 'tutorialSidebar',
+    position: 'left',
+    label: 'Docs',
+  },
+  {
+    href: repositoryUrl,
+    label: 'Github',
+    position: 'right',
+  },
+  ...(blogEnabled
+    ? [{to: '/blog', label: 'Blog', position: 'left' as const}]
+    : []),
+],
+```
+
+The conditional spread adds the blog item only when `blogEnabled` is `true`. Otherwise, an empty array is inserted.
+
+#### Fix the Footer Configuration
+
+The same approach is used for the footer. The blog link is added directly to the existing `More` group instead of accessing the footer by a fixed array index:
+
+```ts
+{
+  title: 'More',
+  items: [
+    {
+      label: 'GitHub',
+      href: repositoryUrl,
+    },
+    {
+      label: 'Template',
+      href: 'https://github.com/facebook/docusaurus',
+    },
+    ...(blogEnabled ? [{label: 'Blog', to: '/blog'}] : []),
+  ],
+},
+```
+
+This solution is safer because it no longer depends on a specific footer group being available at a fixed index. It also keeps the conditional blog configuration directly next to the affected navbar and footer items.
+
+#### Verify the Fix
+
+After the configuration was corrected, both the TypeScript check and the production build were executed:
+
+```powershell
+npm.cmd run typecheck
+npm.cmd run build
+```
+
+Both commands completed successfully, and Docusaurus generated the static production files in the `build` directory.
+
+### 4.10 Update the Copyright Message
 
 The copyright message was customized and extended for the project.
 
 Example:
 
 ```ts
-copyright:
-  `Copyright © ${new Date().getFullYear()} My Project. Built with Docusaurus.`,
+copyright: `Copyright © ${new Date().getFullYear()} Karsten Asche. Extended from the developer-akademie-starter.`,
 ```
 
 Depending on the project, additional information such as the author, company, or template attribution can also be included.
@@ -229,17 +341,6 @@ Depending on the project, additional information such as the author, company, or
 The `README.md` file was updated according to the project checklist.
 
 Project-specific information was added and the default template content was adjusted where necessary.
-
-Typical sections include:
-
-- Project description
-- Requirements
-- Installation
-- Starting the development server
-- Creating a production build
-- Deployment
-- Repository structure
-- Used template
 
 ## 6. Configure GitHub Settings for GitHub Actions
 

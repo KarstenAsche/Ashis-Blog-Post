@@ -129,7 +129,7 @@ const config: Config = {
             },
             {
               label: 'Template',
-              href: 'https://github.com/facebook/docusaurus',
+              href: 'https://github.com/Developer-Akademie-DevSecOpsKurs/dev-blog-template',
             },
             ...(blogEnabled ? [{label: 'Blog', to: '/blog'}] : []),
           ],
