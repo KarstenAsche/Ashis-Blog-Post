@@ -1,0 +1,11 @@
+name: Starter CI
+on:
+  push:
+    branches: [ main ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Display runner details
+        run: echo "Workflow is running on ${{ runner.os}}"
