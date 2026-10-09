@@ -9,9 +9,17 @@ This repository is intended solely to provide information about setting up my vS
 ## Table of Contents
 
 - [Configuration of vServer](#configuration-of-vserver)
+    - [Prerequisites](#prerequisites)
     - [SSH Key Setup & Security](#ssh-key-setup--security)
     - [Nginx Web Server Installation & Configuration](#nginx-web-server-installation)
     - [Git & GitHub Integration](#git--github-integration)
+
+## Prerequisites
+
+    - Virtual Linux Machine
+    - SSH
+    - NGINX as webserver
+    - GIT 
 
 ## SSH Key Setup & Security
 
