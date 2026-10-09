@@ -19,25 +19,25 @@ To enhance the security of the vServer, password-based authentication is disable
 
 1. **Initial Login:** Log in to the vServer using your password:
    ```bash
-   ssh karsten-asche@2.31.51.164
+   ssh <username>@<your_ip>
    ```
 
 2. **Create Keypair on Local Machine:**
    If you don't already have an SSH key, generate a new pair on your *local* machine:
    ```bash
-   ssh-keygen -t ed25519 -C 'karsten.asche@sdash.de'
+   ssh-keygen -t ed25519 -C '<your-email>'
    ```
 
 3. **Transfer Public Key:**
    Copy the public key to the vServer:
    ```bash
-   ssh-copy-id -i ~/.ssh/vserver_ed25519.pub karsten-asche@2.31.51.164
+   ssh-copy-id -i ~/.ssh/vserver_ed25519.pub <username>@<your_ip>
    ```
 
 4. **Test Login via Public Key:**
    Verify that login works without a password:
    ```bash
-   ssh -i /c/Users/karst/.ssh/vserver_ed25519 karsten-asche@2.31.51.164
+   ssh -i /c/Users/karst/.ssh/vserver_ed25519 <username>@<your_ip>
    ```
 
 5. **Modify SSH Configuration (`/etc/ssh/sshd_config`):**
@@ -57,12 +57,12 @@ To enhance the security of the vServer, password-based authentication is disable
     ```
     and try logging in again with your password:
     ```bash
-    ssh -o PubkeyAuthentication=no karsten-asche@2.31.51.164
+    ssh -o PubkeyAuthentication=no <username>@<your_ip>
     ```
      * **Result:** `Permission denied (publickey)` (Successfully blocked).
    * **Login via SSH with key:** Works seamlessly.
    ```bash
-   ssh -i /c/Users/karst/.ssh/vserver_ed25519 karsten-asche@2.31.51.164
+   ssh -i /c/Users/karst/.ssh/vserver_ed25519 <username>@<your_ip>
    ```
 
 ## Nginx Web Server Installation
@@ -140,7 +140,7 @@ Configuring Git on the server for version control and connecting it to GitHub.
 2. **Generate SSH Key for GitHub on the Server:**
    * Generated a separate SSH key 
    ```bash
-   ssh-keygen -t ed25519 -C "karsten.asche@sdash.de"
+   ssh-keygen -t ed25519 -C "<your-email>"
    ```
    on the vServer and added the public key to your GitHub account settings.
 
